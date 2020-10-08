@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:wght@500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+.text {
+  font-family: "Montserrat", sans-serif;
+  padding-left: 4vw;
+  margin-left: 20px;
+  color: #ffffff;
+  font-size: 1.8vw;
+  text-shadow: 1px 1px #333333;
+  width: 50%;
+  display: flex;
+  z-index: 1000;
+}
+
+.slide-text {
+  position: absolute;
+  top: 50%;
+}
+
+.title,
+.video-title {
+  font-family: "Raleway", sans-serif;
+  font-size: 3.5vw;
+  padding: 4vw 4vw 2vw 4vw;
+  color: #ffffff;
+  text-transform: uppercase;
+  width: 60%;
+  margin-left: 20px;
+  display: flex;
+}
+
+.title-position {
+  position: absolute;
+  top: 15px;
+}
+
+.only-text-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  background-image: linear-gradient(to right, #8693ab, #bdd4e7);
+  width: 100%;
+  height: 100%;
+}
+.only-text {
+  font-family: "Raleway", sans-serif;
+  font-size: 3.5vw;
+  text-align: center;
+  color: #ffffff;
+  width: 70%;
+}
+
+.image-slide-text {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.9vw;
+  color: #ffffff;
+  padding: 0 40px;
+}
+
+.slider {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  margin: 0 auto;
+}
+
+.arrow {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  height: 35px;
+  width: 35px;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  transition: transform ease-in 0.1s;
+}
+.arrow:hover {
+  transform: scale(1.1);
+}
+
+.dot {
+  padding: 5px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.dots {
+  position: absolute;
+  bottom: 25px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dot-container {
+  overflow: hidden;
+  height: 10px;
+}
+
+.slide {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding-top: 30px;
+}
+video {
+  height: 100vh;
+  width: 100vw;
+  float: left;
+  top: 0;
+  padding: none;
+  position: absolute;
+  z-index: -1;
+  object-fit: cover;
+  filter: brightness(70%);
+}
+
+.container-slide-1,
+.container-slide-2 {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  background-image: linear-gradient(to right, #8693ab, #bdd4e7);
+}
+
+.left-side-slide-2,
+.right-side-slide-2,
+.left-side-slide-1,
+.right-side-slide-1 {
+  width: 50%;
+}
+
+.left-side-slide-2-image,
+.right-side-slide-1-image {
+  filter: brightness(70%);
+  width: 100%;
+  object-fit: cover;
+}
+
+.background-filter {
+  filter: brightness(70%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media only screen and (max-width: 1200px) {
+  .slide-text {
+    font-size: 20px;
+  }
+
+  .title,
+  .video-title {
+    font-size: 40px;
+  }
+}
+
+@media only screen and (max-width: 840px) {
+  .slide-text {
+    font-size: 18px;
+  }
+
+  .title,
+  .video-title {
+    font-size: 35px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .container-slide-2 {
+    flex-direction: column-reverse;
+  }
+
+  .container-slide-1 {
+    flex-direction: column;
+  }
+  .image-slide-text {
+    font-size: 20px;
+  }
+  .right-side-slide-2,
+  .left-side-slide-1 {
+    width: 80%;
+    padding-bottom: 40px;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .title {
+    font-size: 28px;
+    width: 80%;
+  }
+  .slide-text {
+    width: 80%;
+  }
+  .video-title {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .slide-text,
+  .image-slide-text {
+    font-size: 16px;
+  }
+
+  .title {
+    font-size: 25px;
+  }
+  .only-text {
+    font-size: 25px;
+  }
+  .video-title {
+    font-size: 30px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  button {
+    bottom: 50px;
+  }
+
+  .slide-text {
+    width: 80%;
+  }
+
+  .video-title {
+    font-size: 28px;
+  }
+}
