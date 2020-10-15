@@ -1,4 +1,4 @@
-Full screen image slider, which: 
+Infinite full screen image slider, which: 
 - supports multiple HTML content,
 - works on mobile and desktop devices,
 - scrolls to next/previous slide,

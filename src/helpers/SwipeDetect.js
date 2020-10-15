@@ -1,51 +1,51 @@
-let initialXdesktop = null;
-let initialYdesktop = null;
+let desktopX = null;
+let desktopY = null;
 
 export const startTouchDesktop = ({ e }) => {
-  initialXdesktop = e.clientX;
-  initialYdesktop = e.clientY;
+  desktopX = e.clientX;
+  desktopY = e.clientY;
 };
 
 export const moveTouchDesktop = ({ e, nextSlide, prevSlide }) => {
-  let currentXdesktop = e.clientX;
-  let currentYdesktop = e.clientY;
+  let currentDesktopX = e.clientX;
+  let currentDesktopY = e.clientY;
 
-  let diffXmove = initialXdesktop - currentXdesktop;
-  let diffYmove = initialYdesktop - currentYdesktop;
+  let movementDesktopX = desktopX - currentDesktopX;
+  let movementDesktopY = desktopY - currentDesktopY;
 
-  if (Math.abs(diffXmove) > Math.abs(diffYmove)) {
-    if (diffXmove > 0) {
+  if (Math.abs(movementDesktopX) > Math.abs(movementDesktopY)) {
+    if (movementDesktopX > 0) {
       nextSlide();
     } else {
       prevSlide();
     }
   }
-  initialXdesktop = null;
-  initialYdesktop = null;
+  desktopX = null;
+  desktopY = null;
 };
 
-let initialX = null;
-let initialY = null;
+let mobileX = null;
+let mobileY = null;
 
 export const startTouchMobile = ({ e }) => {
-  initialX = e.touches[0].clientX;
-  initialY = e.touches[0].clientY;
+  mobileX = e.touches[0].clientX;
+  mobileY = e.touches[0].clientY;
 };
 
 export const moveTouchMobile = ({ e, nextSlide, prevSlide }) => {
-  let currentX = e.touches[0].clientX;
-  let currentY = e.touches[0].clientY;
+  let currentMobileX = e.touches[0].clientX;
+  let currentMobileY = e.touches[0].clientY;
 
-  let diffX = initialX - currentX;
-  let diffY = initialY - currentY;
+  let movementMobileX = mobileX - currentMobileX;
+  let movementMobileY = mobileY - currentMobileY;
 
-  if (Math.abs(diffX) > Math.abs(diffY)) {
-    if (diffX > 0) {
+  if (Math.abs(movementMobileX) > Math.abs(movementMobileY)) {
+    if (movementMobileX > 0) {
       nextSlide();
     } else {
       prevSlide();
     }
   }
-  initialX = null;
-  initialY = null;
+  mobileX = null;
+  mobileY = null;
 };

@@ -9,95 +9,121 @@ import {
   startTouchDesktop,
   moveTouchDesktop,
 } from "../helpers/SwipeDetect";
+import { slideArray } from "../data/slideContent";
 
-const Slider = (props) => {
+const Slider = () => {
+  const firstSlide = slideArray[0];
+  const secondSlide = slideArray[1];
+  const lastSlide = slideArray[slideArray.length - 1];
+
+  const getWidth = () => window.innerWidth;
+
   const [state, setState] = useState({
     /*
     activeIndex - keeps track on which slide is active/selected,
     translate - will translate slides left or right,
     transition - smooth transition between slides
+    slides - contains three slides to make slider infinite
     */
     activeIndex: 0,
-    translate: 0,
+    translate: getWidth(),
     transition: 0.45,
+    slides: [lastSlide, firstSlide, secondSlide],
   });
 
-  const { translate, transition, activeIndex } = state;
+  const { translate, transition, slides, activeIndex } = state;
 
-  let totalSlides = props.totalSlides;
-
-  const getWidth = () => window.innerWidth;
-
-  //handle browser resizes
-  const handleResize = () => {
-    setState({ ...state, translate: activeIndex * getWidth() });
-    console.log(getWidth());
-  };
-
+  const transitionRef = useRef();
   const resizeRef = useRef();
 
   useEffect(() => {
+    transitionRef.current = smoothTransition;
     resizeRef.current = handleResize;
   });
 
   useEffect(() => {
+    const smooth = () => {
+      transitionRef.current();
+    };
+
     const resize = () => {
       resizeRef.current();
     };
 
+    const transitionEnd = window.addEventListener("transitionend", smooth);
     const onResize = window.addEventListener("resize", resize);
 
     return () => {
+      window.removeEventListener("transitionend", transitionEnd);
       window.removeEventListener("resize", onResize);
     };
   }, []);
 
+  //add transition again after it was removed because of updating slide array
+  useEffect(() => {
+    if (transition === 0) setState({ ...state, transition: 0.45 });
+  }, [transition]);
+
+  //handle browser resizes
+  const handleResize = () => {
+    setState({ ...state, translate: getWidth(), transition: 0 });
+  };
+
+  //ensure infinite effect
+  const smoothTransition = () => {
+    console.log(activeIndex);
+    let slides = [];
+    // if current is last slide
+    if (activeIndex === slideArray.length - 1) {
+      slides = [slideArray[slideArray.length - 2], lastSlide, firstSlide];
+    }
+    // if current is first slide
+    else if (activeIndex === 0) {
+      slides = [lastSlide, firstSlide, secondSlide];
+    }
+    // if current is neither first, neither last slide
+    else {
+      slides = slideArray.slice(activeIndex - 1, activeIndex + 2);
+    }
+
+    setState({
+      ...state,
+      slides,
+      transition: 0,
+      translate: getWidth(),
+    });
+  };
+
   const nextSlide = () => {
-    //checks if the last slide. if yes, go to first slide
-    if (activeIndex === totalSlides - 1) {
-      return setState({
-        ...state,
-        translate: 0,
-        activeIndex: 0,
-      });
-    }
-    //otherwise, go to next slide
+    //checks if current slide is the last slide. if yes, go to first slide, otherwise, go to next slide
     setState({
       ...state,
-      activeIndex: activeIndex + 1,
-      translate: (activeIndex + 1) * getWidth(),
+      translate: translate + getWidth(),
+      activeIndex: activeIndex === slideArray.length - 1 ? 0 : activeIndex + 1,
     });
   };
-
   const prevSlide = () => {
-    //checks if the first slide. if yes, go to last slide
-    if (activeIndex === 0) {
-      return setState({
-        ...state,
-        translate: (totalSlides - 1) * getWidth(),
-        activeIndex: totalSlides - 1,
-      });
-    }
-    //otherwise, go to previous slide
+    //checks if current slide is the first slide. if yes, go to last slide, otherwise, go to previous slide
     setState({
       ...state,
-      activeIndex: activeIndex - 1,
-      translate: (activeIndex - 1) * getWidth(),
+      translate: 0,
+      activeIndex: activeIndex === 0 ? slideArray.length - 1 : activeIndex - 1,
     });
   };
 
+  //go to selected slide
   const goToSlide = (e) => {
     setState({
       ...state,
       activeIndex: e,
-      translate: e * getWidth(),
+      translate: 0,
     });
   };
 
   return (
     <div className="slider">
       <SliderContent
-        width={getWidth() * totalSlides}
+        width={getWidth() * slides.length}
         translate={translate}
         transition={transition}
         onTouchStart={(e) => startTouchMobile({ e })}
@@ -105,80 +131,9 @@ const Slider = (props) => {
         onMouseDown={(e) => startTouchDesktop({ e })}
         onMouseUp={(e) => moveTouchDesktop({ e, nextSlide, prevSlide })}
       >
-        <Slide>
-          <img
-            className="background-filter"
-            src="https://images.unsplash.com/photo-1565800489013-c64859d0c2d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-          />
-          <p className="title title-position">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor
-          </p>
-          <p className="text slide-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco.
-          </p>
-        </Slide>
-
-        <Slide>
-          <div className="only-text-background">
-            <h1 className="only-text">
-              Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet
-              consectetur adipisci
-            </h1>
-          </div>
-        </Slide>
-
-        <Slide>
-          <div className="container-slide-1">
-            <div className="left-side-slide-1">
-              <p className="image-slide-text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco.
-              </p>
-            </div>
-            <div className="right-side-slide-1">
-              <img
-                className="right-side-slide-1-image"
-                src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-              />
-            </div>
-          </div>
-        </Slide>
-
-        <Slide>
-          <div className="container-slide-2">
-            <div className="left-side-slide-2">
-              <img
-                className="left-side-slide-2-image"
-                src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-              />
-            </div>
-            <div className="right-side-slide-2">
-              <p className="image-slide-text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco.
-              </p>
-            </div>
-          </div>
-        </Slide>
-
-        <Slide>
-          <video loop muted autoPlay>
-            <source
-              src="https://content.clipchamp.com/content-repo/content/previews/stryb_v7045564.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video.
-          </video>
-          <p className="video-title">
-            Duis aute irure dolor, in reprehenderit in voluptate velit esse
-            cillum dolore
-          </p>
-        </Slide>
+        {slides.map((slide, i) => (
+          <Slide key={i}>{slide}</Slide>
+        ))}
       </SliderContent>
 
       <Arrow direction="left" handleClick={prevSlide} />
@@ -186,7 +141,7 @@ const Slider = (props) => {
 
       <Dots
         handleClick={(e) => goToSlide(e)}
-        totalSlides={totalSlides}
+        totalSlides={slideArray.length}
         activeIndex={activeIndex}
       />
     </div>
